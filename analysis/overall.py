@@ -48,7 +48,6 @@ def shareTime(path):
             if len(arr) != 0:
                 ginis.append(gini(arr))
                 nakamotos.append(nakamoto(arr))
-    # ginis = ginis[ginis != 0]
     return(ginis, nakamotos)
 
 
@@ -72,15 +71,12 @@ def louvain(path, size):
             votesFlat += line[1:-1]
             proposalKeys.append(line[0])
             votesByProposal.append(line[1:-1])
-    print("done loop", path)
     votesCollection = collections.Counter(votesFlat)
     votingFrequency = np.array(list(votesCollection.values()))
-    print("done freq:", path)
     arr = np.zeros(int(size-len(votesCollection.values())))
     votingFrequency = np.append(votingFrequency, arr)
     # for idx in range(int(size-len(votesCollection.values()))):
     #     votingFrequency = np.insert(votingFrequency, 0, 0)
-    print("done freq2:", path)
     # voters = np.empty((0, 0))
     # for proposal in votesByProposal:
     #     for voter in proposal:
@@ -261,11 +257,7 @@ print("Moloch:", giniMoloch, nakamotoMoloch)
 frequencyMoloch = frequencyHaus('../onChain/DAOHaus/Moloch/votes.csv')
 noMolochProposals = 42
 
-# ###################### gini CURVE ###########################
-# # https://gist.github.com/CMCDragonkai/c79b9a0883e31b327c88bfadb8b06fc4
-# # ensure your arr is sorted from lowest to highest values first!
-
-
+###################### gini overall ###########################
 with sns.color_palette("tab20", n_colors=10):
     with sns.axes_style("darkgrid"):
         fig1, ax1 = plt.subplots()
@@ -310,6 +302,7 @@ with sns.color_palette("tab20", n_colors=10):
         ax2.set_ylabel("Gini")
         ax2.set_xlabel("Time Interval (normalized)")
 
+###################### Nakamoto ###########################
 with sns.color_palette("tab20", n_colors=10):
     with sns.axes_style("darkgrid"):
         fig3, ax3 = plt.subplots()
@@ -349,6 +342,8 @@ with sns.color_palette("tab20", n_colors=10):
 #         ax7.pie(np.sort(holdersUni[:, 1]),  radius=3, center=(4, 4),
 #                 wedgeprops={"linewidth": 1, "edgecolor": "white"}, frame=True)
 
+
+###################### Pies ###########################
 with sns.axes_style("dark"):
     fig4, ((ax1, ax2, ax3, ax4), (ax5, ax6, ax7, ax8)) = plt.subplots(2, 4)
     fig4.delaxes(ax8)
@@ -404,6 +399,8 @@ with sns.axes_style("dark"):
     ax7.set_title("MetaCartel")
     fig4.tight_layout()
 
+
+###################### Participation ###########################
 frequencyDx = frequencyDx/noDxProposals
 frequencyCurve = frequencyCurve/noCurveProposals
 frequencyUni = frequencyUni/noUniProposals
@@ -475,15 +472,3 @@ with sns.color_palette("tab20"):
         ax2.legend(prop={'size': 10})
 
 plt.show()
-
-# C 2, M 2, U 1
-# balancesCurve = []
-# with open('../onChain/ProtocolDAOs/Curve/shareTime2.csv', "r") as f:
-#     reader = csv.reader(f, delimiter=",")
-#     for i, line in enumerate(reader):
-#         balancesCurve += line[1:-1]
-#         arr = np.asarray(line[1:-1], dtype=float)
-#         arr = arr[arr != 0]
-#         print(gini(arr))
-#         print(np.amax(arr))
-#         nakamoto(arr)
